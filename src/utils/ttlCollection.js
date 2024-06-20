@@ -47,7 +47,7 @@ export function ttlCollection(
     if (pendingPurge.length > 0) {
       const now = timestamp();
       nextPurge = Math.max(now, pendingPurge[0].expiry + slack);
-      task = setFocusTimeout(() => {
+      const getTaskId = setFocusTimeout(() => {
         const now = timestamp();
         let cnt = 0;
         for (const entry of pendingPurge) {
@@ -66,6 +66,7 @@ export function ttlCollection(
         task = null;
         reschedulePurge();
       }, nextPurge - now);
+      task = getTaskId();
     } else {
       task = null;
     }
